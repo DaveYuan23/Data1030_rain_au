@@ -6,8 +6,7 @@ This project uses a machine learning pipeline to predict whether it will rain in
 - [Introduction](#introduction)
 - [Project Structure](#project-structure)
 - [Setup](#setup)
-- [Usage](#usage)
-- [Exploratory Data Analysis (EDA)](#exploratory-data-analysis-eda)
+- [Exploratory Data Analysis (EDA)](#Dataset-Overview)
 - [Preprocessing](#preprocessing)
 - [Results](#results)
 - [License](#license)
@@ -22,15 +21,41 @@ This project is built on the Kaggle "Rain in Australia" dataset, which contains 
 project/
 │
 ├── data/                   # Data files (not included)
-├── notebooks/              # Jupyter notebooks for EDA and modeling
+├── figures/              # Visualizations
+├── results/              # reuslts of the best model
+├── report/                    # final report in pdf
 ├── src/                    # Source code for the ML pipeline
-│   ├── preprocessing.py    # Data preprocessing scripts
-│   ├── train.py            # Model training scripts
-│   └── evaluate.py         # Evaluation scripts
+│   ├── data1030-rain-in-au.ipynb    # Jupyter notebooks for EDA and modeling
 ├── requirements.yaml       # Dependency file
 ├── LICENSE                 # License file
 └── README.md               # This file
 ```
+#setup
+---
+
+## Installation
+
+### Clone this repository:
+```bash
+git clone https://github.com/DaveYuan23/Data1030_rain_au.git
+cd Data1030_rain_au
+```
+###Create and activate a virtual environment:
+```bash
+Copy code
+conda env create -f requirements.yaml
+conda activate rain_au_env
+```
+## Dependencies
+
+The dependencies for this project are listed in the `requirements.yaml` file for easy setup. Key libraries and their versions include:
+
+- `numpy==1.26.4`
+- `pandas==2.2.2`
+- `scikit-learn==1.5.1`
+- `xgboost==2.1.1`
+- `matplotlib==3.9.2`
+- `shap==0.45.1`
 
 ## Dataset Overview
 
@@ -40,14 +65,11 @@ The dataset contains 10 years of daily weather observations from 49 weather stat
 - **Target Variable:** `RainTomorrow` (binary classification: "Yes" or "No").
 
 ### Key Insights:
-- The dataset is imbalanced, with ~70% of samples labeled as "No" for rain.
 - Missing values are significant, with 21 out of 23 columns containing missing values.
-- **Temperature and Wind Direction** are key predictive factors:
-  - Minimum temperatures are higher, and maximum temperatures are lower before rainy days.
-  - The northwest wind direction has the highest association with rainfall.
+- Timeseries property: There is time dependency between each data points. The data set is not i.i.d.
 
 ### Visualizations:
-1. **Class Balance:** Bar plots showing the imbalance in `RainToday` and `RainTomorrow`.
+1. **Wind Direction** are key predictive factors: The northwest wind direction has the highest association with rainfall.
 2. **Temperature vs Rain:** Box plots comparing minimum and maximum temperatures between rainy and non-rainy days.
 3. **Correlation Plot:** Strong correlations are observed among features like temperatures and pressures.
 
@@ -59,7 +81,7 @@ The preprocessing pipeline ensures the dataset is ready for training:
 
 ### Handling Missing Values:
 - **Categorical Variables:** Missing values are imputed with a new class `"other"`.
-- **Continuous Variables:** Missing values are not imputed; a reduced-feature method is used to avoid distortion.
+- **Continuous Variables:** Missing values are not imputed; a reduced-feature method is used.
 
 ### Encoding:
 - **Categorical Variables:** One-hot encoded.
@@ -104,7 +126,4 @@ Global feature importance was analyzed using SHAP values, weight importance, and
 Local feature importance (e.g., SHAP force plots) confirmed these findings and showed consistent results for individual predictions.
 
 ---
-
-### Confusion Matrix:
-Despite achieving high accuracy, the model has a relatively high false negative rate. Future work could explore alternative evaluation metrics, such as the **Fβ score**, to balance precision and recall.
 
