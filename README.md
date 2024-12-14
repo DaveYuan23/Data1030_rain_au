@@ -73,6 +73,8 @@ The dataset contains 10 years of daily weather observations from 49 weather stat
 2. **Temperature vs Rain:** Box plots comparing minimum and maximum temperatures between rainy and non-rainy days.
 3. **Correlation Plot:** Strong correlations are observed among features like temperatures and pressures.
 
+![wind_D](figures/windd_raint_cc.png)
+
 ---
 
 ## Preprocessing
@@ -104,6 +106,8 @@ The preprocessing pipeline ensures the dataset is ready for training:
 - K-Nearest Neighbors (KNN)
 - XGBoost
 
+![resuls](figures/accuracy_barplot_with_baseline.png)
+
 ### Model Performance:
 XGBoost achieved the highest test accuracy of **0.869**, outperforming other models. Below is a comparison:
 
@@ -122,6 +126,8 @@ Global feature importance was analyzed using SHAP values, weight importance, and
 1. `Humidity3pm`
 2. `Pressure9am`
 3. `WindGustSpeed`
+
+![shap importance](figures/shap_importance.png)
 
 Local feature importance (e.g., SHAP force plots) confirmed these findings and showed consistent results for individual predictions.
 
