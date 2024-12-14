@@ -30,3 +30,81 @@ project/
 ├── requirements.yaml       # Dependency file
 ├── LICENSE                 # License file
 └── README.md               # This file
+```
+
+## Dataset Overview
+
+The dataset contains 10 years of daily weather observations from 49 weather stations in Australia. It consists of:
+
+- **145,460 rows** and **23 columns** (16 continuous variables, 6 categorical variables, and 1 target variable).
+- **Target Variable:** `RainTomorrow` (binary classification: "Yes" or "No").
+
+### Key Insights:
+- The dataset is imbalanced, with ~70% of samples labeled as "No" for rain.
+- Missing values are significant, with 21 out of 23 columns containing missing values.
+- **Temperature and Wind Direction** are key predictive factors:
+  - Minimum temperatures are higher, and maximum temperatures are lower before rainy days.
+  - The northwest wind direction has the highest association with rainfall.
+
+### Visualizations:
+1. **Class Balance:** Bar plots showing the imbalance in `RainToday` and `RainTomorrow`.
+2. **Temperature vs Rain:** Box plots comparing minimum and maximum temperatures between rainy and non-rainy days.
+3. **Correlation Plot:** Strong correlations are observed among features like temperatures and pressures.
+
+---
+
+## Preprocessing
+
+The preprocessing pipeline ensures the dataset is ready for training:
+
+### Handling Missing Values:
+- **Categorical Variables:** Missing values are imputed with a new class `"other"`.
+- **Continuous Variables:** Missing values are not imputed; a reduced-feature method is used to avoid distortion.
+
+### Encoding:
+- **Categorical Variables:** One-hot encoded.
+- **Continuous Variables:** Normalized using a standard scaler.
+
+### Feature Reduction:
+- Highly correlated features (e.g., `Temp9am`, `Temp3pm`, `Pressure3pm`) are removed to avoid redundancy.
+
+### Post-Preprocessing:
+- **116 features**
+- **142,193 observations**
+
+---
+
+## Results
+
+### Machine Learning Models Tested:
+- Logistic Regression (L1 and L2 regularization)
+- Random Forest
+- K-Nearest Neighbors (KNN)
+- XGBoost
+
+### Model Performance:
+XGBoost achieved the highest test accuracy of **0.869**, outperforming other models. Below is a comparison:
+
+| **Model**                | **Test Accuracy** |
+|--------------------------|--------------------|
+| Logistic Regression (L1) | 0.862             |
+| Logistic Regression (L2) | 0.858             |
+| Random Forest            | 0.864             |
+| KNN                      | 0.857             |
+| **XGBoost**              | **0.869**         |
+
+---
+
+### Feature Importance:
+Global feature importance was analyzed using SHAP values, weight importance, and permutation importance. Key features include:
+1. `Humidity3pm`
+2. `Pressure9am`
+3. `WindGustSpeed`
+
+Local feature importance (e.g., SHAP force plots) confirmed these findings and showed consistent results for individual predictions.
+
+---
+
+### Confusion Matrix:
+Despite achieving high accuracy, the model has a relatively high false negative rate. Future work could explore alternative evaluation metrics, such as the **Fβ score**, to balance precision and recall.
+
